@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NARS Fitness - Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+     <div class="sidebar-toggle">
+    <i class="fas fa-chevron-left"></i>
+    </div>
+    <div class="sidebar-header">
+      <img src="assets/logo1.png" alt="NARS Fitness" class="sidebar-logo">
+    </div>
+    <div class="sidebar-menu">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a href="#" class="nav-link active" data-section="dashboard">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-section="bookings">
+            <i class="fas fa-calendar-check"></i>
+            <span>Bookings</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-section="classes">
+            <i class="fas fa-dumbbell"></i>
+            <span>Classes</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-section="members">
+            <i class="fas fa-users"></i>
+            <span>Members</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-section="instructors">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <span>Instructors</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-section="notifications">
+            <i class="fas fa-bell"></i>
+            <span>Notifications</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-section="reports">
+            <i class="fas fa-chart-bar"></i>
+            <span>Reports</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-section="settings">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+        <li class="nav-item mt-4">
+          <a href="#" class="nav-link text-danger" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <div>
+        <button class="mobile-menu-btn me-3">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="header-title d-inline-block">
+          <h1>Dashboard</h1>
+          <p>Welcome back, <span id="adminNameDisplay">Admin</span></p>
+        </div>
+      </div>
+      <div class="user-menu">
+        <div class="dropdown">
+          <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+            <i class="fas fa-user-circle me-2"></i>
+            <span id="userName">Admin User</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="#" data-section="settings"><i class="fas fa-user me-2"></i>Profile</a></li>
+            <li><a class="dropdown-item" href="#" data-section="settings"><i class="fas fa-cog me-2"></i>Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#" id="logoutDropdownBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div class="content-section active" id="dashboardSection">
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon primary">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <h3 class="stat-title">Today's Bookings</h3>
+          <div class="stat-value" id="todayBookings">0</div>
+          
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon success">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3 class="stat-title">Total Members</h3>
+          <div class="stat-value" id="totalMembersCount">0</div>
+      
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon warning">
+            <i class="fas fa-money-bill-wave"></i>
+          </div>
+          <h3 class="stat-title">Today's Revenue</h3>
+          <div class="stat-value" id="revenueToday">RM 0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon danger">
+            <i class="fas fa-dumbbell"></i>
+          </div>
+          <h3 class="stat-title">Classes Today</h3>
+          <div class="stat-value" id="classesToday">0</div>
+    
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="chart-container">
+            <div class="chart-header">
+              <h3 class="chart-title">Weekly Bookings</h3>
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="bookingsChartDropdown" data-bs-toggle="dropdown">
+                  This Week
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="#" data-period="week">This Week</a></li>
+                  <li><a class="dropdown-item" href="#" data-period="month">This Month</a></li>
+                  <li><a class="dropdown-item" href="#" data-period="year">This Year</a></li>
+                </ul>
+              </div>
+            </div>
+            <canvas id="bookingsChart"></canvas>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="chart-container">
+            <div class="chart-header">
+              <h3 class="chart-title">Revenue Overview</h3>
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="revenueChartDropdown" data-bs-toggle="dropdown">
+                  This Week
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="#" data-period="week">This Week</a></li>
+                  <li><a class="dropdown-item" href="#" data-period="month">This Month</a></li>
+                  <li><a class="dropdown-item" href="#" data-period="year">This Year</a></li>
+                </ul>
+              </div>
+            </div>
+            <canvas id="revenueChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Bookings -->
+      <div class="data-table mt-4">
+        <div class="table-header">
+          <h3 class="table-title">Recent Bookings</h3>
+          <div class="table-actions">
+            <button class="btn btn-sm btn-outline-primary" data-section="bookings">View All</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Class</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="recentBookings">
+              <!-- Will be populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bookings Section -->
+    <div class="content-section" id="bookingsSection">
+      <div class="data-table">
+        <div class="table-header">
+          <h3 class="table-title">All Bookings</h3>
+          <div class="table-actions">
+            <div class="input-group" style="width: 250px;">
+              <input type="text" class="form-control" id="bookingSearch" placeholder="Search bookings...">
+              <button class="btn btn-outline-secondary" type="button" id="bookingSearchBtn">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Member</th>
+                <th>Class</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="allBookings">
+              <!-- Will be populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+        <div class="table-footer p-3 d-flex justify-content-between align-items-center">
+          <div class="text-muted">Showing <span id="showingFrom">1</span> to <span id="showingTo">10</span> of <span id="totalBookings">0</span> entries</div>
+          <nav>
+            <ul class="pagination mb-0">
+              <li class="page-item disabled">
+                <a class="page-link" href="#" id="prevPage">Previous</a>
+              </li>
+              <li class="page-item active"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#" id="nextPage">Next</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- Classes Section -->
+    <div class="content-section" id="classesSection">
+      <div class="row">
+        <div class="col-lg-5">
+          <div class="data-table mb-4">
+            <div class="table-header">
+              <h3 class="table-title">Manage Class</h3>
+            </div>
+            <div class="p-3">
+              <form id="classForm">
+                <input type="hidden" id="classId">
+                <div class="mb-3">
+                  <label for="className" class="form-label">Class Name</label>
+                  <input type="text" class="form-control" id="className" required>
+                </div>
+                <div class="mb-3">
+                  <label for="instructor" class="form-label">Instructor</label>
+                  <select class="form-select" id="instructor" required>
+                    <option value="">Select Instructor</option>
+                    <!-- Will be populated by JavaScript -->
+                  </select>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="classDate" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="classDate" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="classTime" class="form-label">Time</label>
+                    <input type="time" class="form-control" id="classTime" required>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="classDuration" class="form-label">Duration (mins)</label>
+                    <input type="number" class="form-control" id="classDuration" value="60" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="classCapacity" class="form-label">Capacity</label>
+                    <input type="number" class="form-control" id="classCapacity" required>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="classPrice" class="form-label">Price (RM)</label>
+                    <input type="number" step="0.01" class="form-control" id="classPrice" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="classCategory" class="form-label">Category</label>
+                    <select class="form-select" id="classCategory" required>
+                      <option value="Yoga">Yoga</option>
+                      <option value="Pilates">Pilates</option>
+                      <option value="HIIT">HIIT</option>
+                      <option value="Zumba">Zumba</option>
+                      <option value="Strength">Strength Training</option>
+                      <option value="Cardio">Cardio</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="classDescription" class="form-label">Description</label>
+                  <textarea class="form-control" id="classDescription" rows="3"></textarea>
+                </div>
+                <div class="d-flex gap-2">
+                  <button type="submit" class="btn btn-primary flex-grow-1" id="classSubmitBtn">Add Class</button>
+                  <button type="button" class="btn btn-outline-secondary" id="classCancelBtn" style="display: none;">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="data-table">
+            <div class="table-header">
+              <h3 class="table-title">Upcoming Classes</h3>
+              <div class="table-actions">
+                <div class="input-group" style="width: 200px;">
+                  <input type="date" class="form-control" id="classDateFilter">
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Class</th>
+                    <th>Instructor</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Booked</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="classesList">
+                  <!-- Will be populated by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Members Section -->
+<div class="content-section" id="membersSection">
+  <div class="data-table">
+    <div class="table-header">
+      <h3 class="table-title">Members</h3>
+      <div class="table-actions">
+        <div class="input-group" style="width: 250px;">
+          <input type="text" class="form-control" id="memberSearch" placeholder="Search members...">
+          <button class="btn btn-outline-secondary" type="button" id="memberSearchBtn">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Age</th>
+            <th>Joined</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="usersList">
+          <!-- Will be populated by JavaScript -->
+        </tbody>
+      </table>
+    </div>
+    <div class="table-footer p-3 d-flex justify-content-between align-items-center">
+      <div class="text-muted">Showing <span id="showingMembersFrom">1</span> to <span id="showingMembersTo">10</span> of <span id="totalMembers">0</span> entries</div>
+      <nav>
+        <ul class="pagination mb-0">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" id="prevMemberPage">Previous</a>
+          </li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#" id="nextMemberPage">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    <!-- Instructors Section -->
+    <div class="content-section" id="instructorsSection">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="data-table mb-4">
+            <div class="table-header">
+              <h3 class="table-title">Manage Instructor</h3>
+            </div>
+            <div class="p-3">
+              <form id="instructorForm">
+                <input type="hidden" id="instructorId">
+                <div class="mb-3">
+                  <label for="instructorName" class="form-label">Full Name</label>
+                  <input type="text" class="form-control" id="instructorName" required>
+                </div>
+                <div class="mb-3">
+                  <label for="instructorEmail" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="instructorEmail" required>
+                </div>
+                <div class="mb-3">
+                  <label for="instructorPhone" class="form-label">Phone</label>
+                  <input type="tel" class="form-control" id="instructorPhone">
+                </div>
+                <div class="mb-3">
+                  <label for="instructorSpecialty" class="form-label">Specialty</label>
+                  <select class="form-select" id="instructorSpecialty" required>
+                    <option value="">Select Specialty</option>
+                    <option value="Yoga">Yoga</option>
+                    <option value="Pilates">Pilates</option>
+                    <option value="HIIT">HIIT</option>
+                    <option value="Zumba">Zumba</option>
+                    <option value="Strength Training">Strength Training</option>
+                    <option value="Cardio">Cardio</option>
+                    <option value="Piloxing">Piloxing</option>
+                    <option value="Core Sculpt">Core Sculpt</option>
+                    <option value="Tabata">Tabata</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="instructorBio" class="form-label">Bio</label>
+                  <textarea class="form-control" id="instructorBio" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="instructorPhoto" class="form-label">Photo URL</label>
+                  <input type="text" class="form-control" id="instructorPhoto" placeholder="https://example.com/photo.jpg">
+                </div>
+                <div class="d-flex gap-2">
+                  <button type="submit" class="btn btn-primary flex-grow-1" id="instructorSubmitBtn">Add Instructor</button>
+                  <button type="button" class="btn btn-outline-secondary" id="instructorCancelBtn" style="display: none;">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="data-table">
+            <div class="table-header">
+              <h3 class="table-title">All Instructors</h3>
+              <div class="table-actions">
+                <div class="input-group" style="width: 200px;">
+                  <input type="text" class="form-control" id="instructorSearch" placeholder="Search instructors...">
+                  <button class="btn btn-outline-secondary" type="button" id="instructorSearchBtn">
+                    <i class="fas fa-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Photo</th>
+                    <th>Name</th>
+                    <th>Specialty</th>
+                    <th>Classes</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="instructorsList">
+                  <!-- Will be populated by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications Section -->
+    <div class="content-section" id="notificationsSection">
+      <div class="row">
+        <div class="col-lg-5">
+          <div class="data-table mb-4">
+            <div class="table-header">
+              <h3 class="table-title">Send Notification</h3>
+            </div>
+            <div class="p-3">
+              <form id="notificationForm">
+                <div class="mb-3">
+                  <label for="notificationTitle" class="form-label">Title</label>
+                  <input type="text" class="form-control" id="notificationTitle" required>
+                </div>
+                <div class="mb-3">
+                  <label for="notificationMessage" class="form-label">Message</label>
+                  <textarea class="form-control" id="notificationMessage" rows="5" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Recipients</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="recipientType" id="allMembers" value="all" checked>
+                    <label class="form-check-label" for="allMembers">
+                      All Members
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="recipientType" id="activeMembers" value="active">
+                    <label class="form-check-label" for="activeMembers">
+                      Active Members Only
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="recipientType" id="specificClass" value="class">
+                    <label class="form-check-label" for="specificClass">
+                      Specific Class Attendees
+                    </label>
+                  </div>
+                  <select class="form-select mt-2" id="notificationClass" disabled>
+                    <option value="">Select Class</option>
+                    <!-- Will be populated by JavaScript -->
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Send Notification</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="data-table">
+            <div class="table-header">
+              <h3 class="table-title">Notification History</h3>
+              <div class="table-actions">
+                <div class="input-group" style="width: 200px;">
+                  <input type="date" class="form-control" id="notificationDateFilter">
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Message</th>
+                    <th>Sent</th>
+                    <th>Recipients</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="notificationsList">
+                  <!-- Will be populated by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reports Section -->
+    <div class="content-section" id="reportsSection">
+      <div class="data-table">
+        <div class="table-header">
+          <h3 class="table-title">Generate Reports</h3>
+          <div class="table-actions">
+            <button class="btn btn-sm btn-primary" id="generateReportBtn">
+              <i class="fas fa-file-export me-2"></i>Generate Report
+            </button>
+          </div>
+        </div>
+        <div class="p-3">
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h5 class="card-title">Booking Reports</h5>
+                  <p class="card-text">Generate detailed reports on class bookings, attendance, and revenue.</p>
+                  <div class="mb-3">
+                    <label class="form-label">Date Range</label>
+                    <div class="input-group mb-2">
+                      <input type="date" class="form-control" id="bookingReportStart">
+                      <span class="input-group-text">to</span>
+                      <input type="date" class="form-control" id="bookingReportEnd">
+                    </div>
+                  </div>
+                  <button class="btn btn-outline-primary w-100" id="generateBookingReport">Generate Booking Report</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h5 class="card-title">Revenue Reports</h5>
+                  <p class="card-text">Create financial reports showing revenue trends and payment status.</p>
+                  <div class="mb-3">
+                    <label class="form-label">Report Type</label>
+                    <select class="form-select" id="revenueReportType">
+                      <option value="daily">Daily Revenue</option>
+                      <option value="weekly">Weekly Revenue</option>
+                      <option value="monthly">Monthly Revenue</option>
+                      <option value="class">Class Revenue</option>
+                    </select>
+                  </div>
+                  <button class="btn btn-outline-primary w-100" id="generateRevenueReport">Generate Revenue Report</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h5 class="card-title">Member Reports</h5>
+                  <p class="card-text">Export member lists, activity reports, and engagement metrics.</p>
+                  <div class="mb-3">
+                    <label class="form-label">Report Type</label>
+                    <select class="form-select" id="memberReportType">
+                      <option value="active">Active Members</option>
+                      <option value="new">New Members</option>
+                      <option value="status">Membership Status</option>
+                      <option value="attendance">Attendance Report</option>
+                    </select>
+                  </div>
+                  <button class="btn btn-outline-primary w-100" id="generateMemberReport">Generate Member Report</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Generated Reports</h5>
+            </div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Report Name</th>
+                    <th>Generated On</th>
+                    <th>Type</th>
+                    <th>Period</th>
+                    <th>Download</th>
+                  </tr>
+                </thead>
+                <tbody id="reportsList">
+                  <!-- Will be populated by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Section -->
+    <div class="content-section" id="settingsSection">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Admin Profile</h5>
+            </div>
+            <div class="card-body">
+              <form id="adminProfileForm">
+                <div class="mb-3">
+                  <label for="adminName" class="form-label">Full Name</label>
+                  <input type="text" class="form-control" id="adminName" required>
+                </div>
+                <div class="mb-3">
+                  <label for="adminEmail" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="adminEmail" required>
+                </div>
+                <div class="mb-3">
+                  <label for="adminPhone" class="form-label">Phone</label>
+                  <input type="tel" class="form-control" id="adminPhone">
+                </div>
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Change Password</h5>
+            </div>
+            <div class="card-body">
+              <form id="changePasswordForm">
+                <div class="mb-3">
+                  <label for="currentPassword" class="form-label">Current Password</label>
+                  <input type="password" class="form-control" id="currentPassword" required>
+                </div>
+                <div class="mb-3">
+                  <label for="newPassword" class="form-label">New Password</label>
+                  <input type="password" class="form-control" id="newPassword" required>
+                </div>
+                <div class="mb-3">
+                  <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                  <input type="password" class="form-control" id="confirmPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Change Password</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">System Settings</h5>
+            </div>
+            <div class="card-body">
+              <form id="systemSettingsForm">
+                <div class="mb-3">
+                  <label class="form-label">Business Information</label>
+                  <input type="text" class="form-control mb-2" id="businessName" placeholder="Business Name">
+                  <input type="text" class="form-control mb-2" id="businessAddress" placeholder="Address">
+                  <input type="text" class="form-control mb-2" id="businessPhone" placeholder="Phone">
+                  <input type="text" class="form-control" id="businessEmail" placeholder="Email">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Booking Settings</label>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="allowOnlineBooking" checked>
+                    <label class="form-check-label" for="allowOnlineBooking">
+                      Allow Online Booking
+                    </label>
+                  </div>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="requirePayment" checked>
+                    <label class="form-check-label" for="requirePayment">
+                      Require Payment Confirmation
+                    </label>
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label">Cancellation Policy (hours)</label>
+                    <input type="number" class="form-control" id="cancellationPolicy" value="24">
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Notification Settings</label>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                    <label class="form-check-label" for="emailNotifications">
+                      Email Notifications
+                    </label>
+                  </div>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="smsNotifications">
+                    <label class="form-check-label" for="smsNotifications">
+                      SMS Notifications
+                    </label>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Settings</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-danger text-white">
+              <h5 class="mb-0">Danger Zone</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <button class="btn btn-outline-danger w-100 mb-2" id="backupDatabaseBtn">
+                  <i class="fas fa-database me-2"></i>Backup Database
+                </button>
+                <button class="btn btn-outline-danger w-100 mb-2" id="clearTestDataBtn">
+                  <i class="fas fa-trash-alt me-2"></i>Clear Test Data
+                </button>
+                <button class="btn btn-outline-danger w-100" id="resetSystemBtn">
+                  <i class="fas fa-exclamation-triangle me-2"></i>Reset System
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmModalTitle">Confirm Action</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="confirmModalBody">
+          Are you sure you want to perform this action?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmModalAction">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="viewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewModalTitle">Booking Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="viewModalBody">
+        <!-- Content will be inserted here by JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <div id="paymentActions" class="d-flex gap-2">
+          <!-- Action buttons will appear here for pending payments -->
+        </div>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- In the scripts section at the bottom of dashboard.html -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
